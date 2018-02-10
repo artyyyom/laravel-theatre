@@ -16,4 +16,8 @@
 });*/
 
 Route::get('/', 'NavbarController@getNavbars');
+
 Route::get('/positions', 'PositionController@index');
+
+Route::get('/employees', 'EmployeeController@index');
+Route::get('/employees/{id}', 'EmployeeController@show');
