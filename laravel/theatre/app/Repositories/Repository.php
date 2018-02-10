@@ -6,8 +6,15 @@ abstract class Repository {
 
 	protected $model = FALSE;
 	
-	public function get() {
-		$builder = $this->model->select('*');
+	public function get($select = '*', $take = FALSE, $where = FALSE) {
+		$builder = $this->model->select($select);
+
+		if($take) 
+			$builder->take($take);
+
+		if($where)
+			$builder->where($where[0], $where[1], $where[2]);
+
 		return $builder->get();
 	}
 }
