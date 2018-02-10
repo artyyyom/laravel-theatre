@@ -25,8 +25,13 @@ class DeletePerformancesProducersTable extends Migration
      */
     public function down()
     {
-        Schema::table('performances_producers', function (Blueprint $table) {
-            //
+        Schema::create('performances_producers', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('performance_id')->unsigned();
+            $table->foreign('performance_id')->references('id')->on('performances');
+            $table->integer('producer_id')->unsigned();
+            $table->foreign('producer_id')->references('id')->on('producers');
+            $table->timestamps();
         });
     }
 }

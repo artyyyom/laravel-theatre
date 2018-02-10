@@ -25,8 +25,19 @@ class DeleteProducersTable extends Migration
      */
     public function down()
     {
-        Schema::table('producers', function (Blueprint $table) {
-            //
+        Schema::create('producers', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('surname');
+            $table->string('name');
+            $table->string('middlename');
+            $table->string('address');
+            $table->date('birthday');
+            $table->text('biography');
+            $table->string('phone_number');
+            $table->string('biography_short');
+            $table->string('photo_main');
+            $table->text('photos');
+            $table->timestamps();
         });
     }
 }

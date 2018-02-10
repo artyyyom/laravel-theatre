@@ -28,7 +28,8 @@ class UpdateEmployeesTable extends Migration
     public function down()
     {
         Schema::table('employees', function (Blueprint $table) {
-            //
+            $table->dropForeign(['position_id']);
+            $table->dropColumn('position_id');
         });
     }
 }

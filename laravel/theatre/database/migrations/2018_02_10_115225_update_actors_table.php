@@ -15,7 +15,7 @@ class UpdateActorsTable extends Migration
     {
         Schema::table('actors', function (Blueprint $table) {
             if (Schema::hasTable('actors')) {
-            Schema::rename('actors', 'employees');
+                Schema::rename('actors', 'employees');
             }
         });
 
@@ -29,7 +29,7 @@ class UpdateActorsTable extends Migration
     public function down()
     {
         Schema::table('actors', function (Blueprint $table) {
-            //
+            Schema::rename('employees', 'actors');
         });
     }
 }

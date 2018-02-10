@@ -28,7 +28,8 @@ class UpdatePerformancesActorsTables extends Migration
     public function down()
     {
         Schema::table('performances_actors', function (Blueprint $table) {
-            //
+            Schema::rename('performances_employees', 'performances_actors');
+            
         });
     }
 }

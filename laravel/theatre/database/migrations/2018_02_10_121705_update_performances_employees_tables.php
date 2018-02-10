@@ -21,7 +21,6 @@ class UpdatePerformancesEmployeesTables extends Migration
                 $table->integer('employee_id')->unsigned();
                 $table->foreign('employee_id')->references('id')->on('employees');
                 $table->foreign('performance_id')->references('id')->on('performances');
-            $table->foreign('performance_id')->references('id')->on('performances');
             }
         });
     }
@@ -34,7 +33,12 @@ class UpdatePerformancesEmployeesTables extends Migration
     public function down()
     {
         Schema::table('performances_employees', function (Blueprint $table) {
-            //
+            $table->integer('actor_id')->unsigned();
+            $table->foreign('actor_id')->references('id')->('actors');
+            $table->foreign('performance_id')->references('id')->('performances');
+            $table->dropForeign(['employee_id']);
+            $table->dropColumn('employee_id');
+            $table->dropForeign(['performance_id']);
         });
     }
 }
