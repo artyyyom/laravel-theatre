@@ -17,6 +17,11 @@ class UpdatePerformancesEmployeesTables extends Migration
             if (Schema::hasTable('performances_employees')) {
                 $table->dropForeign('performances_actors_actor_id_foreign');
                 $table->dropColumn('actor_id');
+                 $table->dropForeign('performances_actors_performance_id_foreign');
+                $table->integer('employee_id')->unsigned();
+                $table->foreign('employee_id')->references('id')->on('employees');
+                $table->foreign('performance_id')->references('id')->on('performances');
+            $table->foreign('performance_id')->references('id')->on('performances');
             }
         });
     }
