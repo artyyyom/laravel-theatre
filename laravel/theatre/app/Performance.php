@@ -10,11 +10,8 @@ class Performance extends Model
     	return $this->hasMany('App\Seance');
     }
 
-    public function actors() {
-    	return $this->belongsToMany('App\Actor');
+    public function employees() {
+    	return $this->belongsToMany('App\Employee');
     }
 
-    public function producers() {
-    	return $this->belongsToMany('App\Producer');
-    }
 }

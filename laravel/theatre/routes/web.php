@@ -16,3 +16,4 @@
 });*/
 
 Route::get('/', 'NavbarController@getNavbars');
+Route::get('/positions', 'PositionController@index');
