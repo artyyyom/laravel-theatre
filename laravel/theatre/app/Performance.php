@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Performance extends Model
 {
-    public funtion seances() {
+
+    public function seances() {
     	return $this->hasMany('App\Seance');
     }
 
     public function employees() {
-    	return $this->belongsToMany('App\Employee');
+    	return $this->belongsToMany('App\Employee', 'performances_employees', 'performance_id', 'employee_id');
     }
 
 }

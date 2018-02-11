@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     public function performances() {
-    	return $this->belongsToMany('App\Performances');
+    	return 'hello';//$this->belongsToMany('App\Performance');
     }
 
-    public function positions() {
-    	return $this->belongsTo('App\Positions');
+    public function position() {
+    	return $this->belongsTo('App\Position');
     }
 }

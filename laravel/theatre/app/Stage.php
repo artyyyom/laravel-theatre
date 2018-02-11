@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stage extends Model
 {
-    public funtion seances() {
+    public function seances() {
     	return $this->hasMany('App\Seance');
     }
 }

@@ -10,14 +10,18 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 /*Route::get('/', function () {
     return view('welcome');
 });*/
+// get navigation menu
+Route::get('/', 'NavbarController@index');
 
-Route::get('/', 'NavbarController@getNavbars');
-
+// get positions
 Route::get('/positions', 'PositionController@index');
 
+// get employees
 Route::get('/employees', 'EmployeeController@index');
 Route::get('/employees/{id}', 'EmployeeController@show');
+
+Route::get('/performances', 'PerformanceController@index');
+Route::get('/performance/{id}', 'PerformanceController@show');
