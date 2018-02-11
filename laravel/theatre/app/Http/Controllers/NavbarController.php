@@ -11,7 +11,10 @@ class NavbarController extends SiteController
     }
 
     public function index() {
-    	return response()->json($this->n_rep->get());
+    	return [
+            response()->json($this->n_rep->get()),
+            'status' => '200 OK'
+        ];
     }
 
     public function store() {

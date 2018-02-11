@@ -14,6 +14,9 @@ class PositionController extends SiteController
     }
 
     public function index() {
-    	return response()->json($this->p_rep->get());
+    	return [
+    		response()->json($this->p_rep->get()),
+    		'status' => '200 OK'
+    	];
     }
 }
