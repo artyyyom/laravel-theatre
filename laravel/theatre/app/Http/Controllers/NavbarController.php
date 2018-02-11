@@ -11,8 +11,12 @@ class NavbarController extends SiteController
     }
 
     public function index() {
+        $navbars = $this->n_rep->get();
+        if(is_null($navbars)) 
+            return response()->json($this->error);
+
     	return [
-            response()->json($this->n_rep->get()),
+            response()->json($navbars),
             'status' => '200 OK'
         ];
     }

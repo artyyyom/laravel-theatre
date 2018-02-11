@@ -9,6 +9,8 @@ use App\Repositories\NavbarsRepository;
 
 class SiteController
 {
+	protected $error = '{"status": "505 Internal Server Error"}';
+
 	protected $n_rep;
 	protected $p_rep;
 	protected $e_rep;

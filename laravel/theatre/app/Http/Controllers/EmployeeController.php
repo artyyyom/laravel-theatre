@@ -14,16 +14,26 @@ class EmployeeController extends SiteController
     }
 
     public function show($id) {
+        $employee = $this->e_rep
+            ->get('*', FALSE, ['position_id','=',$id]);
+
+        if(is_null($employee)) 
+            return response()->json($this->error);
+
     	return [
-            response()->json($this->e_rep
-    		->get('*', FALSE, ['position_id','=',$id]))
+            response()->json($employee);
             'status' => '200 OK'
         ];
     }
 
     public function index() {
+        $employees = $this->e_rep->get();
+        
+        if(is_null($employees)) 
+            return response()->json($this->error);
+
     	return [
-            response()->json($this->e_rep->get()),
+            response()->json($employees),
             'status' => '200 OK'
         ];
     }
