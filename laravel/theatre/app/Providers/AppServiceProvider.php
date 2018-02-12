@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
             echo "<br>";
             print_r($query->bindings);
          echo "</pre>";
-        });
+        }); 
     }
 
     /**

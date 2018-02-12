@@ -14,7 +14,7 @@
     return view('welcome');
 });*/
 // get navigation menu
-Route::get('/', 'NavbarController@index');
+Route::get('/navbars', 'NavbarController@index');
 
 // get positions
 Route::get('/positions', 'PositionController@index');
