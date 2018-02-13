@@ -15,8 +15,9 @@ class UpdateEmployeesTable extends Migration
     {
         Schema::table('employees', function (Blueprint $table) {
             if (!Schema::hasColumn('employees', 'position_id')) {
-            $table->integer('position_id')->unsigned();
-            $table->foreign('position_id')->references('id')->on('positions');
+                $table->integer('position_id')->unsigned();
+                $table->foreign('position_id')->references('id')->on('positions');
+            }
         });
     }
 

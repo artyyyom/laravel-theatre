@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateActorsTable extends Migration
+class CreateCategoryPlacesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class UpdateActorsTable extends Migration
      */
     public function up()
     {
-        Schema::table('actors', function (Blueprint $table) {
-            if (Schema::hasTable('actors')) {
-                Schema::rename('actors', 'employees');
-            }
+        Schema::create('category_places', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
         });
-
     }
 
     /**
@@ -28,8 +27,6 @@ class UpdateActorsTable extends Migration
      */
     public function down()
     {
-        Schema::table('actors', function (Blueprint $table) {
-            Schema::rename('employees', 'actors');
-        });
+        Schema::dropIfExists('category__places');
     }
 }
