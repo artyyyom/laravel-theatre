@@ -16,7 +16,8 @@ class RowsPlacesTableSeeder extends Seeder
             'place_id' => 1,
             'category_id' => 1,
             'price' => '120',
-            'status' => 0            
+            'status' => 0,
+            'stage_id' => 1            
         ]
         );
         DB::table('rows_places')->insert([
@@ -24,7 +25,8 @@ class RowsPlacesTableSeeder extends Seeder
             'place_id' => 1,
             'category_id' => 2,
             'price' => '60',
-            'status' => 0   
+            'status' => 0,
+            'stage_id' => 1   
         ]
         );
     }
