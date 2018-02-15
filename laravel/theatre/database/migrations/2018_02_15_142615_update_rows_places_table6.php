@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateRowsPlacesTable2 extends Migration
+class UpdateRowsPlacesTable6 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class UpdateRowsPlacesTable2 extends Migration
     public function up()
     {
         Schema::table('rows_places', function (Blueprint $table) {
-            $table->smallInteger('status');
+            $table->dropColumn('price');
+            $table->dropColumn('status');
         });
     }
 
@@ -26,7 +27,8 @@ class UpdateRowsPlacesTable2 extends Migration
     public function down()
     {
         Schema::table('rows_places', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->smallInteger('status');
+            $table->integer('price');
         });
     }
 }
