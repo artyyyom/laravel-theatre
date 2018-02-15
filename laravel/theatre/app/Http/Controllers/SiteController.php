@@ -11,10 +11,11 @@ class SiteController
 {
 	protected $error = '{"status": "505 Internal Server Error"}';
 
-	protected $n_rep;
-	protected $p_rep;
-	protected $e_rep;
-	protected $pm_rep;
+	protected $n_rep;  // navigations
+	protected $p_rep;  // positions
+	protected $e_rep;  // employees
+	protected $pm_rep; // performances
+    protected $rp_rep; // rows_places
 
     public function __construct(NavbarsRepository $n_rep) {
     	$this->n_rep = $n_rep;

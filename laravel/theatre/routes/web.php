@@ -23,5 +23,8 @@ Route::get('/positions', 'PositionController@index');
 Route::get('/employees', 'EmployeeController@index');
 Route::get('/employees/{id}', 'EmployeeController@show');
 
+// get performances
 Route::get('/performances', 'PerformanceController@index');
 Route::get('/performance/{id}', 'PerformanceController@show');
+
+Route::get('/rowplace/{id}', 'RowPlaceController@show');

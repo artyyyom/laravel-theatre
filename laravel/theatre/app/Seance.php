@@ -13,5 +13,9 @@ class Seance extends Model
     public function stage() {
     	return $this->belongsTo('App\Stage');
     }
+    
+    public function tickets() {
+        return $this->hasMany('App\Ticket');
+    }
 
 }

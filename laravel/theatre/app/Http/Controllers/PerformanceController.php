@@ -15,12 +15,13 @@ class PerformanceController extends SiteController
 
     public function index() {
 		$performances = $this->pm_rep->get()
-						->load('employees','seances.stage');
+							 ->load('employees','seances.stage.rows_places');
+		//dd($performances);
 
     	if(is_null($performances)) 
     		return response()->json($this->error);
-
-    	return response()->json($performances)A;
+		dd($performances);
+    	return response()->json($performances);
     }
     
     public function show($id) {
