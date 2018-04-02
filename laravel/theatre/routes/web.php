@@ -17,7 +17,7 @@
 Route::get('/navbars', 'NavbarController@index');
 
 // get positions
-Route::get('/positions', 'PositionController@index');
+Route::get('/positions', 'PositionController@getAll');
 
 // get employees
 Route::get('/employees', 'EmployeeController@getAll');

@@ -13,14 +13,11 @@ class PositionController extends SiteController
     	$this->p_rep = $p_rep;
     }
 
-    public function index() {
+    public function getAll() {
         $positions = $this->p_rep->get();
         if(is_null($positions)) 
             return response()->json($this->error);
 
-    	return [
-    		response()->json($positions),
-    		'status' => '200 OK'
-    	];
+    	return response()->json(['data'=>$positions, 'status' => '200 OK']);
     }
 }
