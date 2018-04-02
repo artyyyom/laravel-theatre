@@ -20,6 +20,7 @@ class EmployeeTest extends TestCase
         $response->assertJsonStructure([
             'data' => [[
                 'id',
+                'name',
                 'surname', 
                 'middlename',
                 'address',
@@ -39,6 +40,7 @@ class EmployeeTest extends TestCase
     	$response->assertJsonStructure([
             'data' => [[
                 'id',
+                'name',
                 'surname', 
                 'middlename',
                 'address',
@@ -52,13 +54,14 @@ class EmployeeTest extends TestCase
             ]]
         ]);
     }
-    
+
     public function testGetOne() {
     	$response = $this->get('/employees/1');
     	$response->assertStatus(200);
     	$response->assertJsonStructure([
             'data' => [[
                 'id',
+                'name',
                 'surname', 
                 'middlename',
                 'address',
