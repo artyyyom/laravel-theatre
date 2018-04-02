@@ -10,7 +10,7 @@ class NavbarController extends SiteController
     	parent::__construct(new \App\Repositories\NavbarsRepository(new \App\Navbar));
     }
 
-    public function index () {
+    public function getAll () {
         $navbars = $this->n_rep->get();
         if(is_null($navbars)) 
             return response()->json($this->error);

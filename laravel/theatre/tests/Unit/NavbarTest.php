@@ -13,7 +13,7 @@ class NavbarTest extends TestCase
      *
      * @return void
      */
-    public function testIndex()
+    public function testGetAll()
     {
         $response = $this->get('/navbars');
         $response->assertStatus(200);
