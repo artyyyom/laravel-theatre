@@ -13,26 +13,24 @@ class PerformanceController extends SiteController
     	$this->pm_rep = $pm_rep;
     }
 
-    public function index() {
-		$performances = $this->pm_rep->get()
-							 ->load('employees','seances.stage.rows_places');
-		//dd($performances);
-
+    public function getPreview() {
+		$performances = $this->pm_rep->get(['id','name','genre','photo_main', 'duration']);
+		
     	if(is_null($performances)) 
     		return response()->json($this->error);
-		dd($performances);
-    	return response()->json($performances);
+	
+    	return response()->json(['data' => $performances, 'status' => '200 OK']);
     }
     
-    public function show($id) {
+    public function getOne($id) {
     	$performance = $this->pm_rep->get(
-    									['name','genre','photo_main'],
+    									['*'],
     									FALSE, 
     									['id','=',$id]);
     	if(is_null($performance)) 
     		return response()->json($this->error);
     	
     	$performance->load('employees','seances.stage');
-    	return response()->json($performance);
+    	return response()->json(['data' => $performance, 'status' => '200 OK']);
     }
 }

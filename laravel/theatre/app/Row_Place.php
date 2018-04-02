@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Row_Place extends Model
 {
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
     protected $table = 'rows_places';
     public function stage() {
     	return $this->belongsTo('App\Stage');

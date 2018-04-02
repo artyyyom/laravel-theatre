@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seance extends Model
 {
+	protected $hidden = [
+    	'created_at',
+    	'updated_at'
+    ];
+
     public function performance() {
     	return $this->belongsTo('App\Performance');
     }
