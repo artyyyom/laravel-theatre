@@ -10,15 +10,12 @@ class NavbarController extends SiteController
     	parent::__construct(new \App\Repositories\NavbarsRepository(new \App\Navbar));
     }
 
-    public function index() {
+    public function index () {
         $navbars = $this->n_rep->get();
         if(is_null($navbars)) 
             return response()->json($this->error);
 
-    	return [
-            response()->json($navbars),
-            'status' => '200 OK'
-        ];
+    	return response()->json(["data" => $navbars, "status" => "200"]);
     }
 
     public function store() {

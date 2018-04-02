@@ -26,8 +26,8 @@ abstract class Repository {
 		
 	}
 
-	public function one($alias,$attr = array()) {
-		$result = $this->model->where('id', $alias)->first();
+	public function one($id,$attr = array()) {
+		$result = $this->model->where('id', $id)->get();
 		return $result;
 	}
 }

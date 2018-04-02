@@ -20,8 +20,9 @@ Route::get('/navbars', 'NavbarController@index');
 Route::get('/positions', 'PositionController@index');
 
 // get employees
-Route::get('/employees', 'EmployeeController@index');
-Route::get('/employees/{id}', 'EmployeeController@show');
+Route::get('/employees', 'EmployeeController@getAll');
+Route::get('/employee/{id}', 'EmployeeController@getOne');
+Route::get('/employees/{id}', 'EmployeeController@getOneProfession');
 
 // get performances
 Route::get('/performances', 'PerformanceController@index');
