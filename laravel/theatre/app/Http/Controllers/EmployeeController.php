@@ -23,7 +23,7 @@ class EmployeeController extends SiteController
     	return response()->json(['data' => $employee, 'status' => '200']);
     }
 
-    public function getAll() {
+    public function index() {
         $employees = $this->e_rep->get();
         
         if(is_null($employees)) 
@@ -31,8 +31,13 @@ class EmployeeController extends SiteController
 
         return response()->json(['data' => $employees, 'status' => '200']);
     }
+    public function store() { }
 
-    public function getOne($id) {
+    public function update($id) { }
+
+    public function destroy($id) 
+
+    public function show($id) {
         $employee = $this->e_rep->one($id);
 
         if(is_null($employee)) 

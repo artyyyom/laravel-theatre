@@ -14,6 +14,7 @@
     return view('welcome');
 });*/
 // get navigation menu
+/*
 Route::get('/navbars', 'NavbarController@getAll');
 
 // get positions
@@ -29,3 +30,4 @@ Route::get('/performances', 'PerformanceController@getPreview');
 Route::get('/performance/{id}', 'PerformanceController@getOne');
 
 Route::get('/rowplace/{id}', 'RowPlaceController@getAll');
+*/
