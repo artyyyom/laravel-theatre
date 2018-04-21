@@ -25,17 +25,13 @@ class EmployeeController extends SiteController
 
     public function index() {
         $employees = $this->e_rep->get();
-        
-        if(is_null($employees)) 
-            return response()->json($this->error);
-
-        return response()->json(['data' => $employees, 'status' => '200']);
+        return response()->json($employees);
     }
     public function store() { }
 
     public function update($id) { }
 
-    public function destroy($id) 
+    public function destroy($id) { }
 
     public function show($id) {
         $employee = $this->e_rep->one($id);
