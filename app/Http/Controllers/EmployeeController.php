@@ -23,7 +23,7 @@ class EmployeeController extends SiteController
     	return response()->json(['data' => $employee, 'status' => '200']);
     }
 
-    public function index() {
+    public function index(Request $request) {
         $employees = $this->e_rep->get();
         return response()->json($employees);
     }
