@@ -35,12 +35,10 @@ class EmployeeController extends SiteController
 
     public function show($id) {
         $employee = $this->e_rep->one($id);
-
-        if(is_null($employee)) 
-            return response()->json($this->error);
-
-       return response()->json(['data' => $employee, 'status' => '200']);
+        $employee->load('performances');
+    //    $employee->pivot->role;
+        return response()->json($employee);
     }
  
 
-}
+}           

@@ -28,6 +28,6 @@ abstract class Repository {
 
 	public function one($id,$attr = array()) {
 		$result = $this->model->where('id', $id)->get();
-		return $result;
+		return $result[0];
 	}
 }

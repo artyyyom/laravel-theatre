@@ -13,11 +13,20 @@ class PositionController extends SiteController
     	$this->p_rep = $p_rep;
     }
 
-    public function getAll() {
+    public function index() {
+        $array = [];
         $positions = $this->p_rep->get();
-        if(is_null($positions)) 
-            return response()->json($this->error);
-
-    	return response()->json(['data'=>$positions, 'status' => '200 OK']);
+        $positions->load('employees');
+        for($i = 0; $i < count($positions); $i++) {
+            $array[$i]['id'] = $positions[$i]['id'];
+            $array[$i]['name'] = $positions[$i]['name'];
+            $array[$i]['order'] = $positions[$i]['order'];
+            if(empty($positions[$i]->employees[0]))
+                $array[$i]['is_parent'] = false;
+            else {
+                $array[$i]['is_parent'] = true;
+            }
+        }
+        return response()->json($array);
     }
 }

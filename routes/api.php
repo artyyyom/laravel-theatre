@@ -24,7 +24,9 @@ Route::apiResources([
 //Route::get('/employees', 'EmployeeController@index');
 Route::middleware('cors')->group(function(){
    Route::apiResources(
-		['employees' =>'EmployeeController']
+        ['employees' => 'EmployeeController',
+         'positions' => 'PositionController'   
+        ]
 	);	
 
 });
