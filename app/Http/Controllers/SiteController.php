@@ -15,7 +15,8 @@ class SiteController
 	protected $p_rep;  // positions
 	protected $e_rep;  // employees
 	protected $pm_rep; // performances
-    protected $rp_rep; // rows_places
+	protected $rp_rep; // rows_places
+	protected $s_rep;  // stages
 
     public function __construct(NavbarsRepository $n_rep) {
     	$this->n_rep = $n_rep;
