@@ -27,7 +27,9 @@ Route::middleware('cors')->group(function(){
         ['employees' => 'EmployeeController',
          'positions' => 'PositionController',
          'stages' => 'StageController',  
-         'seasons' => 'SeasonController' 
+         'seasons' => 'SeasonController',
+         'performances' => 'PerformanceController',
+         'seances' => 'SeanceController' 
         ]
 	);	
 

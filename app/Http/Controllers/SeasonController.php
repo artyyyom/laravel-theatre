@@ -16,7 +16,19 @@ class SeasonController extends SiteController
 
     public function index () {
         $seasons = $this->ss_rep->get();
-    	return response()->json($seasons);
+        $seasons->load('performances');
+        for($i = 0; $i < count($seasons); $i++) {
+            $array[$i]['id'] = $seasons[$i]['id'];
+            $array[$i]['name'] = $seasons[$i]['name'];
+            $array[$i]['start_date'] = $seasons[$i]['start_date'];
+            $array[$i]['end_date'] = $seasons[$i]['end_date'];
+            if(empty($seasons[$i]->performances[0]))
+                $array[$i]['is_parent'] = false;
+            else {
+                $array[$i]['is_parent'] = true;
+            }
+        }
+    	return response()->json($array);
     }
 
     public function store() {

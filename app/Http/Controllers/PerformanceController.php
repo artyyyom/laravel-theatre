@@ -13,13 +13,13 @@ class PerformanceController extends SiteController
     	$this->pm_rep = $pm_rep;
     }
 
-    public function getPreview() {
-		$performances = $this->pm_rep->get(['id','name','genre','photo_main', 'duration']);
-		
+    public function index() {
+		$performances = $this->pm_rep->get();
+		$performances->load('season', 'seances.stage');
     	if(is_null($performances)) 
     		return response()->json($this->error);
 	
-    	return response()->json(['data' => $performances, 'status' => '200 OK']);
+    	return response()->json($performances);
     }
     
     public function getOne($id) {
