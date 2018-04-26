@@ -15,8 +15,12 @@ abstract class Repository {
 
 			//$builder->groupBy('date');
 
-			if($where)
-				$builder->where($where[0], $where[1], $where[2]);
+			if($where) {
+				for($i = 0; $i < count($where); $i++) {
+					$builder->where($where[$i][0], $where[$i][1], $where[$i][2]);
+				}
+			}
+				
 		
 			if($order)
 				$builder->orderBy($order[0], $order[1]);

@@ -15,7 +15,7 @@ class PerformanceController extends SiteController
 
     public function index() {
 		$performances = $this->pm_rep->get();
-		$performances->load('season', 'seances.stage');
+		$performances->load('seances.stage');
     	if(is_null($performances)) 
     		return response()->json($this->error);
 	

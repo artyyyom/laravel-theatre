@@ -19,9 +19,6 @@ class Performance extends Model
     	return $this->belongsToMany('App\Employee', 'performances_employees', 'performance_id', 'employee_id');
     }
 
-    public function season() {
-        return $this->belongsTo('App\Season');
-    }
     
 
 }

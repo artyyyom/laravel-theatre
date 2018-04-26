@@ -11,6 +11,11 @@ class Seance extends Model
     	'updated_at'
     ];
 
+    
+    public function season() {
+        return $this->belongsTo('App\Season');
+    }
+
     public function performance() {
     	return $this->belongsTo('App\Performance');
     }

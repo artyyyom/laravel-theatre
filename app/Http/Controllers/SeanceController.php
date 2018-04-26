@@ -6,20 +6,23 @@ use Illuminate\Http\Request;
 
 use App\Repositories\SeancesRepository;
 
-
+use DB;
+use App\Seance;
 class SeanceController extends SiteController
 {
     public function __construct(SeancesRepository $sn_rep) {
     	parent::__construct(new \App\Repositories\NavbarsRepository(new \App\Navbar));
         $this->sn_rep = $sn_rep;
     }
-
-    public function index () {
+    public function checkBool($string) {
+        $isFilter = $string === 'true' ? true : false;
+        return $isFilter;
+    }
+    public function filter($seances) {
         $array = [];
-        $seances = $this->sn_rep->get('*', FALSE, FALSE, ['date', 'asc']);
-        $seances->load('performance', 'stage');
         $date = '';
         $j = 0; 
+    
         foreach($seances as $seance) {
             if($date === $seance['date']) 
                 $j++;
@@ -27,8 +30,9 @@ class SeanceController extends SiteController
                 $date = $seance['date'];
                 $j=0;
             }
-            $array[$seance['date']][$j]['id'] = $seance['id'];
             $array[$seance['date']][$j]['time'] = $seance['time'];
+            $array[$seance['date']][$j]['date'] = $seance['date'];
+            $array[$seance['date']][$j]['season_id'] = $seance['season_id'];
             $array[$seance['date']][$j]['performance_id'] = $seance['performance_id'];
             $array[$seance['date']][$j]['stage_id'] = $seance['stage_id'];
             $array[$seance['date']][$j]['performance'] = $seance['performance'];
@@ -37,7 +41,28 @@ class SeanceController extends SiteController
         foreach($array as $a => $i) {
             $array['keys'][] = $a;
         }
-    	return response()->json($array);
+
+        return  $array;    
+    }
+
+    public function index (Request $request) {
+        
+        $filter = $request->input('filter');
+        //$filter = $this->checkBool($isFilter); 
+        if($filter === 'false') {
+            $seances = $this->sn_rep->get('*', FALSE, FALSE, ['date', 'asc']);
+            return response()->json($seances);
+        }
+        if($filter === 'true') {
+            $seancesFilter = [];
+            //$seances = $this->sn_rep->get('*', FALSE, [['date', '>=', date('Y-m-d'), ['time', '>', date('H:i:s')]]], ['date', 'asc']);
+            $seances = Seance::whereIn('season_id', function($query) {
+                $query->select(DB::raw(1))->from('seasons')->whereRaw('seasons.id = seances.season_id && seasons.isActive = 1');
+            })->where('date', '>=', date('Y-m-d'))->with('performance', 'stage')
+            ->get();
+            $seancesFilter = $this->filter($seances);
+            return response()->json($seancesFilter);
+        }
     }
 
     public function store() {

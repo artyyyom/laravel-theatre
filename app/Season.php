@@ -11,8 +11,8 @@ class Season extends Model
     	'updated_at'
     ];
 
-    public function performances() {
-    	return $this->hasMany('App\Performance');
+    public function seances() {
+    	return $this->hasMany('App\Seance');
     }
 
 }
