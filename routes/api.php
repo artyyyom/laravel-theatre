@@ -29,7 +29,8 @@ Route::middleware('cors')->group(function(){
          'stages' => 'StageController',  
          'seasons' => 'SeasonController',
          'performances' => 'PerformanceController',
-         'seances' => 'SeanceController' 
+         'seances' => 'SeanceController',
+         'units' => 'UnitController' 
         ]
 	);	
 

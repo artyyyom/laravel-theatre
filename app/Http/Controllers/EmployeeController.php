@@ -25,6 +25,7 @@ class EmployeeController extends SiteController
 
     public function index(Request $request) {
         $employees = $this->e_rep->get();
+        $employees->load('positions');
         return response()->json($employees);
     }
     public function store() { }

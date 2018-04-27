@@ -58,7 +58,7 @@ class SeanceController extends SiteController
             //$seances = $this->sn_rep->get('*', FALSE, [['date', '>=', date('Y-m-d'), ['time', '>', date('H:i:s')]]], ['date', 'asc']);
             $seances = Seance::whereIn('season_id', function($query) {
                 $query->select(DB::raw(1))->from('seasons')->whereRaw('seasons.id = seances.season_id && seasons.isActive = 1');
-            })->where('date', '>=', date('Y-m-d'))->with('performance', 'stage')
+            })->where('date', '>=', date('Y-m-d'))->orderBy('date','asc')->with('performance', 'stage')
             ->get();
             $seancesFilter = $this->filter($seances);
             return response()->json($seancesFilter);

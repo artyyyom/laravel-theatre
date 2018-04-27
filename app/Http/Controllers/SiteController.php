@@ -19,6 +19,7 @@ class SiteController
 	protected $s_rep;  // stages
 	protected $ss_rep; // seasons
 	protected $sn_rep; // seances
+	protected $u_rep;  // units
 
     public function __construct(NavbarsRepository $n_rep) {
     	$this->n_rep = $n_rep;

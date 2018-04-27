@@ -16,7 +16,8 @@ class Performance extends Model
     }
 
     public function employees() {
-    	return $this->belongsToMany('App\Employee', 'performances_employees', 'performance_id', 'employee_id');
+    	return $this->belongsToMany('App\Employee', 'performances_employees', 'performance_id', 'employee_id')
+            ->withPivot('role', 'role');
     }
 
     

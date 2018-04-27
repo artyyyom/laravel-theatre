@@ -16,7 +16,12 @@ class Employee extends Model
             ->withPivot('role', 'role');
     }
 
-    public function position() {
-    	return $this->belongsTo('App\Position');
+    public function positions() {
+        return $this->belongsToMany('App\Position', 'employees_positions', 'employee_id',  'position_id');
     }
+
+    public function unit() {
+        return $this->belongsTo('App\Unit');
+    }
+
 }

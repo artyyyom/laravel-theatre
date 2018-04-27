@@ -22,15 +22,10 @@ class PerformanceController extends SiteController
     	return response()->json($performances);
     }
     
-    public function getOne($id) {
-    	$performance = $this->pm_rep->get(
-    									['*'],
-    									FALSE, 
-    									['id','=',$id]);
-    	if(is_null($performance)) 
-    		return response()->json($this->error);
-    	
-    	$performance->load('employees','seances.stage');
-    	return response()->json(['data' => $performance, 'status' => '200 OK']);
+    public function show($id) {
+		$performance = $this->pm_rep->one($id);
+        $performance->load('employees.unit');
+    //    $employee->pivot->role;
+        return response()->json($performance);
     }
 }

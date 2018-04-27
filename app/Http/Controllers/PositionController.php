@@ -27,6 +27,6 @@ class PositionController extends SiteController
                 $array[$i]['is_parent'] = true;
             }
         }
-        return response()->json($array);
+        return response()->json($positions);
     }
 }
