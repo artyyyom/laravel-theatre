@@ -16,6 +16,8 @@ class PositionController extends SiteController
     public function index() {
         $array = [];
         $positions = $this->p_rep->get();
+        if(is_null($positions)) 
+            return $this->error("positions");
         $positions->load('employees');
         for($i = 0; $i < count($positions); $i++) {
             $array[$i]['id'] = $positions[$i]['id'];

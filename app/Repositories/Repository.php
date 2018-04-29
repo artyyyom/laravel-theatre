@@ -38,7 +38,13 @@ abstract class Repository {
 	}
 
 	public function one($id,$attr = array()) {
-		$result = $this->model->where('id', $id)->get();
-		return $result[0];
+		try {
+			$result = $this->model->where('id', $id)->get();
+			return $result[0];
+		}
+		catch(\Exception $e) {
+			return null;
+		}
+
 	}
 }

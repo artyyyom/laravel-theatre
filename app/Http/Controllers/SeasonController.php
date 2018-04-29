@@ -34,13 +34,17 @@ class SeasonController extends SiteController
         $filter = $request->input('filter');
         if($filter === 'false') {
             $seasons = $this->ss_rep->get('*', FALSE, FALSE, ['start_date', 'desc']);
+            if(is_null($seasons)) 
+                return $this->error("seasons");
             $seasons->load('seances');
             $seasonsFilter = $this->isParent($seasons);
             return response()->json($seasonsFilter);
         }
         if($filter === 'last') {
             $seasons = $this->ss_rep->get('*', 1, [['isActive','=',1]], ['start_date', 'desc']);
-           // $seasons->load('seances');
+            if(is_null($seasons)) 
+                return $this->error("seasons");
+            // $seasons->load('seances');
             $seasonsFilter = $this->isParent($seasons);
             return response()->json($seasonsFilter);
         }

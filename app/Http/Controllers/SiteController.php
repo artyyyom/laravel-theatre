@@ -24,7 +24,12 @@ class SiteController
     public function __construct(NavbarsRepository $n_rep) {
     	$this->n_rep = $n_rep;
 
-    }
-
+	}
+	public function error($value) {
+		return response()->json([
+            'error' => "$value is empty"
+        ], 404);
+	}
+	
 
 }

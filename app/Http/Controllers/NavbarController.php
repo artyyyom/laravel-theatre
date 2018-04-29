@@ -13,7 +13,7 @@ class NavbarController extends SiteController
     public function getAll () {
         $navbars = $this->n_rep->get();
         if(is_null($navbars)) 
-            return response()->json($this->error);
+            return $this->error("navbars");
 
     	return response()->json(["data" => $navbars, "status" => "200"]);
     }

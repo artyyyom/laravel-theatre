@@ -17,6 +17,8 @@ class StageController extends SiteController
     public function index () {
         $array = [];
         $stages = $this->s_rep->get();
+        if(is_null($stages)) 
+            return $this->error("stages");
         $stages->load('seances');
         for($i = 0; $i < count($stages); $i++) {
             $array[$i]['id'] = $stages[$i]['id'];

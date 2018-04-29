@@ -17,14 +17,17 @@ class PerformanceController extends SiteController
 		$performances = $this->pm_rep->get();
 		$performances->load('seances.stage');
     	if(is_null($performances)) 
-    		return response()->json($this->error);
+            return $this->error("performances");
 	
     	return response()->json($performances);
     }
     
     public function show($id) {
-		$performance = $this->pm_rep->one($id);
+        $performance = $this->pm_rep->one($id);
+        if(is_null($performance)) 
+            return $this->error("performance");
         $performance->load('employees.unit');
+        
     //    $employee->pivot->role;
         return response()->json($performance);
     }

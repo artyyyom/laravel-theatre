@@ -36,6 +36,7 @@ class SeanceController extends SiteController
             $array[$seance['date']][$j]['performance_id'] = $seance['performance_id'];
             $array[$seance['date']][$j]['stage_id'] = $seance['stage_id'];
             $array[$seance['date']][$j]['performance'] = $seance['performance'];
+            $array[$seance['date']][$j]['datetime'] = $seance['datetime'];
             $array[$seance['date']][$j]['stage'] = $seance['stage'];
         }
         foreach($array as $a => $i) {
@@ -51,6 +52,8 @@ class SeanceController extends SiteController
         //$filter = $this->checkBool($isFilter); 
         if($filter === 'false') {
             $seances = $this->sn_rep->get('*', FALSE, FALSE, ['date', 'asc']);
+            if(is_null($seances)) 
+                return $this->error("seances");
             return response()->json($seances);
         }
         if($filter === 'true') {
@@ -58,8 +61,10 @@ class SeanceController extends SiteController
             //$seances = $this->sn_rep->get('*', FALSE, [['date', '>=', date('Y-m-d'), ['time', '>', date('H:i:s')]]], ['date', 'asc']);
             $seances = Seance::whereIn('season_id', function($query) {
                 $query->select(DB::raw(1))->from('seasons')->whereRaw('seasons.id = seances.season_id && seasons.isActive = 1');
-            })->where('date', '>=', date('Y-m-d'))->orderBy('date','asc')->with('performance', 'stage')
+            })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('date','asc')->with('performance', 'stage')
             ->get();
+            if(is_null($seances)) 
+                return $this->error("seances");
             $seancesFilter = $this->filter($seances);
             return response()->json($seancesFilter);
         }

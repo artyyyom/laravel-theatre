@@ -16,6 +16,8 @@ class UnitController extends SiteController
 
     public function index (Request $request) {
         $units = $this->u_rep->get();
+        if(is_null($units)) 
+            return $this->error("units");
         $filter = $request->input('filter');
         if($filter==='false') {
             $units->load('employees');
