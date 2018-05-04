@@ -1,7 +1,7 @@
 <?php
 
 namespace  App\Repositories;
-
+use DB;
 abstract class Repository {
 
 	protected $model = FALSE;
@@ -9,7 +9,6 @@ abstract class Repository {
 	public function get($select = '*', $take = FALSE, $where = FALSE, $order = FALSE) {
 		try {
 			$builder = $this->model->select($select);
-
 			if($take) 
 				$builder->take($take);
 
@@ -28,7 +27,7 @@ abstract class Repository {
 			
 				
 			$builder = $builder->get();
-
+			
 			return $builder;
 		}
 		catch(\Exception $e) {
