@@ -30,7 +30,10 @@ Route::middleware('cors')->group(function(){
          'seasons' => 'SeasonController',
          'performances' => 'PerformanceController',
          'seances' => 'SeanceController',
-         'units' => 'UnitController' 
+         'units' => 'UnitController',
+         'rows_places' => 'RowPlaceController',
+         'tickets' => 'TicketController',
+         'category_places' => 'CategoryPlaceController' 
         ]
 	);	
 
