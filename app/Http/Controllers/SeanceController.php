@@ -30,6 +30,7 @@ class SeanceController extends SiteController
                 $date = $seance['date'];
                 $j=0;
             }
+            $array[$seance['date']][$j]['id'] = $seance['id'];
             $array[$seance['date']][$j]['time'] = $seance['time'];
             $array[$seance['date']][$j]['date'] = $seance['date'];
             $array[$seance['date']][$j]['season_id'] = $seance['season_id'];
@@ -50,12 +51,14 @@ class SeanceController extends SiteController
         
         $filter = $request->input('filter');
         //$filter = $this->checkBool($isFilter); 
+        /* Get all seances */
         if($filter === 'false') {
             $seances = $this->sn_rep->get('*', FALSE, FALSE, ['date', 'asc']);
             if(is_null($seances)) 
                 return $this->error("seances");
             return response()->json($seances);
         }
+        /* Get actual seances */
         if($filter === 'true') {
             $seancesFilter = [];
             //$seances = $this->sn_rep->get('*', FALSE, [['date', '>=', date('Y-m-d'), ['time', '>', date('H:i:s')]]], ['date', 'asc']);
@@ -68,6 +71,7 @@ class SeanceController extends SiteController
             $seancesFilter = $this->filter($seances);
             return response()->json($seancesFilter);
         }
+
     }
 
     public function store() {

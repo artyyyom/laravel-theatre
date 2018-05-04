@@ -20,6 +20,8 @@ class SiteController
 	protected $ss_rep; // seasons
 	protected $sn_rep; // seances
 	protected $u_rep;  // units
+	protected $t_rep;  // tickets
+	protected $cp_rep; // category_places
 
     public function __construct(NavbarsRepository $n_rep) {
     	$this->n_rep = $n_rep;
