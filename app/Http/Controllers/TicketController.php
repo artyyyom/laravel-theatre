@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\TicketsRepository;
+use App\Ticket;
 
 class TicketController extends SiteController
 {
@@ -36,9 +37,11 @@ class TicketController extends SiteController
     public function store() { }
 
     public function update($id, Request $request) {
+        $is_avalaible = $request[0];
+        $ticket = Ticket::findOrFail($id)
+                    ->update($request->all());
 
-        //Devices::find($id)->update(['deleted' => 1]);
-        return response()->json(compact($id, $request));
+        return $request;
     }
 
     public function put($id, Requst $request) {

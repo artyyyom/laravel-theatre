@@ -10,6 +10,7 @@ class Ticket extends Model
     	'created_at',
     	'updated_at'
     ];
+    protected $fillable = ['is_avalaible', 'status'];
     public function seance() {
         $this->belongsTo('App\Seance');
     }
