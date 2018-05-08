@@ -25,10 +25,6 @@ class RowPlaceController extends SiteController
         $rows_places = $this->rp_rep->get('*', FALSE, [['stage_id', '=', $id]]);
         if(is_null($rows_places)) 
             return response()->json($this->error);
-
-    	return [
-    		response()->json($rows_places),
-    		'status' => '200 OK'
-    	];
+        return response()->json($rows_places);
     }
 }

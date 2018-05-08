@@ -6,11 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
+    public $incrementing = false;
+
     protected $hidden = [
     	'created_at',
     	'updated_at'
     ];
-    protected $fillable = ['is_avalaible', 'status', 'user_id'];
+    protected $primaryKey = "id";
+
+    protected $fillable = ['id','is_avalaible', 'status', 'user_id'];
+    
+
     public function seance() {
         $this->belongsTo('App\Seance');
     }

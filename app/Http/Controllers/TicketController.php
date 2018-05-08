@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\TicketsRepository;
 use App\Ticket;
+use DB;
 
 class TicketController extends SiteController
 {
@@ -37,10 +38,11 @@ class TicketController extends SiteController
     public function store() { }
 
     public function update($id, Request $request) {
-        $ticket = Ticket::findOrFail($id)
-                    ->update($request->all());
-
-        return $request;
+        $ticket = DB::table('tickets')->where('id', $id)->update($request->all());
+        if(!$ticket) {
+            return response()->json(['message' => 'Данные успешно обновлены', 'status' => '404']);
+        }
+        return response()->json(['message' => $ticket]);
     }
 
     public function put($id, Requst $request) {
