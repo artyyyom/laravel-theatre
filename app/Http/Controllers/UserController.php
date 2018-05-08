@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Repositories\UsersRepository;
 use App\User;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Validator;
+use Illuminate\Support\Facades\Validator;
+
 class UserController extends SiteController
 {
     public function __construct(UsersRepository $us_rep) {
@@ -21,11 +22,19 @@ class UserController extends SiteController
     }
 
     public function store(Request $request) {
-        $request->validate([
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:users',
+        //     'phone' => 'required'
+        // ]);
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'phone' => 'required'
         ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
         $name = strtolower($request->name);
         $email = strtolower($request->email);
         $phone = $request->phone;
