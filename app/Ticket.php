@@ -10,13 +10,17 @@ class Ticket extends Model
     	'created_at',
     	'updated_at'
     ];
-    protected $fillable = ['is_avalaible', 'status'];
+    protected $fillable = ['is_avalaible', 'status', 'user_id'];
     public function seance() {
         $this->belongsTo('App\Seance');
     }
     
     public function row_place() {
         $this->belongsTo('App\Row_Place');
+    }
+
+    public function user() {
+        $this->belongsTo('App\User');
     }
     
 }

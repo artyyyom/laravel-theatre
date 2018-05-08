@@ -33,7 +33,8 @@ Route::middleware('cors')->group(function(){
          'units' => 'UnitController',
          'rows_places' => 'RowPlaceController',
          'tickets' => 'TicketController',
-         'category_places' => 'CategoryPlaceController' 
+         'category_places' => 'CategoryPlaceController',
+         'users' => 'UserController' 
         ]
 	);	
 

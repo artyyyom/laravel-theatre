@@ -37,7 +37,6 @@ class TicketController extends SiteController
     public function store() { }
 
     public function update($id, Request $request) {
-        $is_avalaible = $request[0];
         $ticket = Ticket::findOrFail($id)
                     ->update($request->all());
 
