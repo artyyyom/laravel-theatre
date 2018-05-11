@@ -18,6 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('cors')->group(function(){
+    Route::post('getUserTickets', 'TicketController@getUserTickets');
+    Route::post('getUserActualSeances', 'SeanceController@getUserActualSeances');
+    Route::post('getUserHistorySeances', 'SeanceController@getUserHistorySeances'); 
     Route::post('login', 'UserController@login');
     Route::post('register', 'UserController@register');
     Route::post('logout', 'UserController@logout');  

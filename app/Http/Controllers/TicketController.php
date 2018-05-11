@@ -45,7 +45,7 @@ class TicketController extends SiteController
         return response()->json(['message' => $ticket]);
     }
 
-    public function put($id, Requst $request) {
+    public function put($id, Request $request) {
         //Devices::find($id)->update(['deleted' => 1]);
         return response()->json(compact($id, $request));
     }
@@ -56,5 +56,16 @@ class TicketController extends SiteController
 
     }
  
-
+    public function getUserTickets() {
+        $user = auth()->user();
+        if($user && $user->hasRole(['user'])) {
+            $tickets = $this->t_rep->get('*', FALSE, [['user_id', '=', $user->id]]);
+            if(is_null($tickets)) 
+                return $this->error("tickets");
+        
+            return response()->json($tickets);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
 }           

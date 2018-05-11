@@ -39,14 +39,14 @@ class UserController extends SiteController
         $name = strtolower($request->name);
         $email = strtolower($request->email);
         $phone = $request->phone;
-        $password = Hash::make(str_random(8));
+        $password = Hash::make("password");
         $user = User::create([
             'name' => $name,
             'email' => $email,
             'password' => $password,
             'phone' => $phone,
         ]);
-
+        $user->attachRole('user');    
         return response()->json($user->id);
     }
 

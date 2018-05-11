@@ -8,6 +8,7 @@ use App\Repositories\SeancesRepository;
 
 use DB;
 use App\Seance;
+use App\Ticket;
 class SeanceController extends SiteController
 {
     public function __construct(SeancesRepository $sn_rep) {
@@ -84,5 +85,33 @@ class SeanceController extends SiteController
 
     public function destroy() {
     	
+    }
+    public function getUserActualSeances() {
+        $user = auth()->user();
+        if($user && $user->hasRole(['user'])) {
+            $seances = Seance::whereIn('id', function($query) use ($user) {
+                $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $user->id");
+            })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('datetime','asc')
+              ->with(['tickets' => function($query) use ($user) {
+                $query->where("user_id", $user->id);
+            }])->with('performance', 'stage')->get();
+            return response()->json($seances);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+    public function getUserHistorySeances() {
+        $user = auth()->user();
+        if($user && $user->hasRole(['user'])) {
+            $seances = Seance::whereIn('id', function($query) use ($user) {
+                $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $user->id");
+            })->where('datetime', '<', date('Y-m-d H:i:s'))->orderBy('datetime','desc')
+              ->with(['tickets' => function($query) use ($user) {
+                $query->where("user_id", $user->id);
+            }])->with('performance', 'stage')->get();
+            return response()->json($seances);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 }
