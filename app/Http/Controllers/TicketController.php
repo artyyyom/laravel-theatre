@@ -44,7 +44,25 @@ class TicketController extends SiteController
         }
         return response()->json(['message' => $ticket]);
     }
+    public function updateTicketsStatus($id, Request $request) {
+        $user = auth()->user();
+        if($user && $user->hasRole(['user'])) {
+            if(!$request->has('user_id')) {
+                $ticket = DB::table('tickets')->where('id', $id)->update(['status' => $request->status, 'user_id' => $user->id]);
 
+            }
+            else {
+                $ticket = DB::table('tickets')->where('id', $id)->update($request->all());
+            }
+            if(!$ticket) {
+                return response()->json(['message' => 'Данные успешно обновлены', 'status' => '404']);
+            }
+            return response()->json(['message' => $ticket]);    
+        }
+        else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }            
     public function put($id, Request $request) {
         //Devices::find($id)->update(['deleted' => 1]);
         return response()->json(compact($id, $request));
