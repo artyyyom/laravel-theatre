@@ -12,6 +12,9 @@ class Category_Place extends Model
     	'updated_at'
     ];
     public function rows_places() {
-        $this->hasMany('App\Row_Place');
+        return $this->hasMany('App\Row_Place');
+    }
+    public function tickets() {
+        return $this->hasMany('App\Ticket');
     }
 }

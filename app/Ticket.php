@@ -18,15 +18,19 @@ class Ticket extends Model
     
 
     public function seance() {
-        $this->belongsTo('App\Seance');
+        return $this->belongsTo('App\Seance');
     }
     
     public function row_place() {
-        $this->belongsTo('App\Row_Place');
+        return $this->belongsTo('App\Row_Place');
+    }
+
+    public function category_place() {
+        return $this->belongsTo('App\Category_Place', 'category_id');
     }
 
     public function user() {
-        $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
     
 }

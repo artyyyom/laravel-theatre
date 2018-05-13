@@ -9,6 +9,8 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\UserMail;
+use Illuminate\Support\Facades\Mail;
 
 
 class UserController extends SiteController
@@ -47,6 +49,7 @@ class UserController extends SiteController
             'phone' => $phone,
         ]);
         $user->attachRole('user');    
+        Mail::to($email)->send(new UserMail($user));
         return response()->json($user->id);
     }
 

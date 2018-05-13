@@ -21,9 +21,11 @@ Route::middleware('cors')->group(function(){
     Route::post('getUserTickets', 'TicketController@getUserTickets');
     Route::post('getUserActualSeances', 'SeanceController@getUserActualSeances');
     Route::post('getUserHistorySeances', 'SeanceController@getUserHistorySeances'); 
+    Route::post('updateTicketsStatus/{id}', 'TicketController@updateTicketsStatus');
     Route::post('login', 'UserController@login');
     Route::post('register', 'UserController@register');
-    Route::post('logout', 'UserController@logout');  
+    Route::post('logout', 'UserController@logout'); 
+    Route::post('pdfgenerator', 'PdfGenerateController@pdfview');   
     Route::group(['middleware' => 'auth:api'], function(){
          Route::post('details', 'UserController@details');	
      });

@@ -93,7 +93,7 @@ class SeanceController extends SiteController
                 $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $user->id");
             })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('datetime','asc')
               ->with(['tickets' => function($query) use ($user) {
-                $query->where("user_id", $user->id);
+                $query->where("user_id", $user->id)->with('category_place');
             }])->with('performance', 'stage')->get();
             return response()->json($seances);
         } else {
@@ -106,10 +106,10 @@ class SeanceController extends SiteController
             $seances = Seance::whereIn('id', function($query) use ($user) {
                 $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $user->id");
             })->where('datetime', '<', date('Y-m-d H:i:s'))->orderBy('datetime','desc')
-              ->with(['tickets' => function($query) use ($user) {
-                $query->where("user_id", $user->id);
+              ->with(['tickets.category_place' => function($query) use ($user) {
+                $query->where("tickets.user_id", $user->id)->with('category_place');
             }])->with('performance', 'stage')->get();
-            return response()->json($seances);
+            return response()->json($seances); 
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
