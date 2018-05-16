@@ -10,6 +10,9 @@ class Stage extends Model
     	'created_at',
     	'updated_at'
     ];
+    protected $fillable = [
+        'name'
+    ];
     public function seances() {
     	return $this->hasMany('App\Seance');
     }
