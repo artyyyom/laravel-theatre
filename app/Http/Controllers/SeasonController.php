@@ -76,14 +76,14 @@ class SeasonController extends SiteController
         if($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $name = mb_strtolower($request->name);
+        $name = $request->name;
         try {
         $season = Season::create([
             'name' => $name, 
             'start_date' => $request->start_date,
             'end_date' => $request->end_date
         ]);
-        return response()->json(['message' => 'Season successfully update'], 200);    
+        return response()->json(['message' => 'Season successfully create'], 200);    
         }
         catch(Exception $e) {
             return response()->json(['message' => 'error season create'], 1451);

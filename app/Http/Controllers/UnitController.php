@@ -78,13 +78,13 @@ class UnitController extends SiteController
         if($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $name = mb_strtolower($request->name);
+        $name = $request->name;
         try {
         $unit = Unit::create([
             'name' => $name,
             'order'=> $request->order 
         ]);
-        return response()->json(['message' => 'Unit successfully update'], 200);    
+        return response()->json(['message' => 'Unit successfully create'], 200);    
         }
         catch(Exception $e) {
             return response()->json(['message' => 'error unit create'], 1451);

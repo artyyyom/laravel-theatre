@@ -60,7 +60,7 @@ class StageController extends SiteController
         $stage = Stage::create([
             'name' => $name
         ]);
-        return response()->json(['message' => 'Stage successfully update'], 200);    
+        return response()->json(['message' => 'Stage successfully create'], 200);    
         }
         catch(Exception $e) {
             return response()->json(['message' => 'error stage create'], 1451);
