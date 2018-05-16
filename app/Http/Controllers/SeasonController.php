@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\SeasonsRepository;
-
+use Illuminate\Support\Facades\Validator;
+use DB;
+use App\Season;
 
 class SeasonController extends SiteController
 {
@@ -52,15 +54,73 @@ class SeasonController extends SiteController
         }
     }
 
-    public function store() {
-
+    public function show($id) {
+        $season = $this->ss_rep->one($id);
+        if(is_null($season)) 
+            return $this->error("season");
+        return response()->json($season);
     }
 
-    public function update() {
+    public function store(Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date'
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        $name = mb_strtolower($request->name);
+        try {
+        $season = Season::create([
+            'name' => $name, 
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date
+        ]);
+        return response()->json(['message' => 'Season successfully update'], 200);    
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error season create'], 1451);
+        }
     }
 
-    public function destroy() {
-    	
+    public function update($id, Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+        $season = DB::table('seasons')->where('id', $id)->update($request->all());
+        
+        if(!$season)
+            return response()->json(['message' => 'Table not updated'], 404);
+
+        return response()->json(['message' => 'Season update succesfully'], 200); 
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error season update'], 1451);
+        }
+    }
+
+    public function destroy($id) {
+    	$user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+            $season = Season::find($id)->delete();
+            return response()->json(['message' => 'Season succsessfully delete'], 200);
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'Season restrict delete'], 1451);
+        }
     }
 }
