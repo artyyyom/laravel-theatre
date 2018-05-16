@@ -11,6 +11,10 @@ class Category_Place extends Model
     	'created_at',
     	'updated_at'
     ];
+    protected $fillable = [
+        'name'
+    ];
+
     public function rows_places() {
         return $this->hasMany('App\Row_Place');
     }

@@ -101,7 +101,7 @@ class UnitController extends SiteController
         $unit = DB::table('units')->where('id', $id)->update($request->all());
         
         if(!$unit)
-            return response()->json(['message' => 'Данные не обновлены', 'status' => '404']);
+            return response()->json(['message' => 'Table not updated'], 404);
 
         return response()->json(['message' => 'Unit update succesfully'], 200); 
         }

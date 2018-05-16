@@ -54,7 +54,8 @@ class StageController extends SiteController
         if($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $name = mb_strtolower($request->name);
+        $name = $request->name;
+        
         try {
         $stage = Stage::create([
             'name' => $name
@@ -76,7 +77,7 @@ class StageController extends SiteController
         $stage = DB::table('stages')->where('id', $id)->update($request->all());
         
         if(!$stage)
-            return response()->json(['message' => 'Данные не обновлены', 'status' => '404']);
+            return response()->json(['message' => 'Table not update'], 404);
 
         return response()->json(['message' => 'Stage update succesfully'], 200); 
         }
