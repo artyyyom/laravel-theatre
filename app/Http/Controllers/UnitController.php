@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Unit;
+use DB;
 use App\Repositories\UnitsRepository;
-
+use Illuminate\Support\Facades\Validator;
 
 class UnitController extends SiteController
 {
@@ -56,21 +57,73 @@ class UnitController extends SiteController
                 return response()->json($array);
                 }
         }
-       
+    }
+    public function show($id) {
+        $unit = $this->u_rep->one($id);
+        if(is_null($unit)) 
+            return $this->error("units");
+        return response()->json($unit);
+    }
+    public function store(Request $request) {  
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
 
-
-    	
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'order' => 'required',
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        $name = mb_strtolower($request->name);
+        try {
+        $unit = Unit::create([
+            'name' => $name,
+            'order'=> $request->order 
+        ]);
+        return response()->json(['message' => 'Unit successfully update'], 200);    
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error unit create'], 1451);
+        }
     }
 
-    public function store() {
+    public function update($id, Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+        $unit = DB::table('units')->where('id', $id)->update($request->all());
+        
+        if(!$unit)
+            return response()->json(['message' => 'Данные не обновлены', 'status' => '404']);
 
+        return response()->json(['message' => 'Unit update succesfully'], 200); 
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error unit update'], 1451);
+        }
     }
 
-    public function update() {
+    public function destroy($id) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+            $unit = Unit::find($id)->delete();
+            return response()->json(['message' => 'Unit succsessfully delete'], 200);
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'Unit restrict delete'], 1451);
+        }
+        
 
-    }
-
-    public function destroy() {
-    	
     }
 }

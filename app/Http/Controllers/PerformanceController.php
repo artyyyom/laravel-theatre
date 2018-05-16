@@ -30,7 +30,6 @@ class PerformanceController extends SiteController
             if(is_null($performance)) 
                 return $this->error("performance");
             $performance->load('employees.unit');
-            
         //    $employee->pivot->role;
             return response()->json($performance);
         }
@@ -58,8 +57,6 @@ class PerformanceController extends SiteController
                 }]);
                 return response()->json($performance);
             }
-
-            
         }
     }
 }

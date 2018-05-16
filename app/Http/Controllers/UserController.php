@@ -70,6 +70,18 @@ class UserController extends SiteController
 
         return $this->respondWithToken($token);
     }
+    public function loginAdminPanel() {
+        $credentials = request(['email', 'password']);
+
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $user = auth()->user();
+        if(!$user && !$user->hasRole(['moderator', 'administrator']))
+            return response()->json(['error' => 'Unauthorized'], 401);
+            
+        return $this->respondWithToken($token);
+    }
 
     /**
      * Get the authenticated User.

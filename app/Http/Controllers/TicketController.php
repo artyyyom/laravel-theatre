@@ -7,6 +7,7 @@ use App\Repositories\TicketsRepository;
 use App\Ticket;
 use DB;
 
+
 class TicketController extends SiteController
 {
     public function __construct(TicketsRepository $t_rep) {
@@ -49,13 +50,12 @@ class TicketController extends SiteController
         if($user && $user->hasRole(['user'])) {
             if(!$request->has('user_id')) {
                 $ticket = DB::table('tickets')->where('id', $id)->update(['status' => $request->status, 'user_id' => $user->id]);
-
             }
             else {
                 $ticket = DB::table('tickets')->where('id', $id)->update($request->all());
             }
             if(!$ticket) {
-                return response()->json(['message' => 'Данные успешно обновлены', 'status' => '404']);
+                return response()->json(['message' => 'Данные не обновлены', 'status' => '404']);
             }
             return response()->json(['message' => $ticket]);    
         }

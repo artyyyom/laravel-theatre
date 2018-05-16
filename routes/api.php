@@ -23,6 +23,7 @@ Route::middleware('cors')->group(function(){
     Route::post('getUserHistorySeances', 'SeanceController@getUserHistorySeances'); 
     Route::post('updateTicketsStatus/{id}', 'TicketController@updateTicketsStatus');
     Route::post('login', 'UserController@login');
+    Route::post('loginAdminPanel', 'UserController@loginAdminPanel');  
     Route::post('register', 'UserController@register');
     Route::post('logout', 'UserController@logout'); 
     Route::post('pdfgenerator', 'PdfGenerateController@pdfview');   
