@@ -23,6 +23,7 @@ class SiteController
 	protected $t_rep;  // tickets
 	protected $cp_rep; // category_places
 	protected $us_rep; // users
+	protected $r_rep;  // roles
 
     public function __construct(NavbarsRepository $n_rep) {
     	$this->n_rep = $n_rep;

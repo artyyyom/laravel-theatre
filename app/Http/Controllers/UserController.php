@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\UserMail;
 use Illuminate\Support\Facades\Mail;
-
+use DB;
 
 class UserController extends SiteController
 {
@@ -23,10 +23,98 @@ class UserController extends SiteController
         
     }
 
+    public function getUserById($id) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole('administrator')) 
+            return response()->json(['error' => 'Unauthorized'], 403);
 
-    public function index () {
-        // $users = $this->us_rep->get();
-        // return response()->json($users);
+        $userInform = User::find($id);
+        $userInform->load('roles');
+        return response()->json($userInform);
+    }
+    public function updateUser($id, Request $request) {
+        $userAuth = auth()->user();
+        if(!$userAuth)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$userAuth->hasRole('administrator')) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+        $roles = DB::table('role_user')->where('user_id', $id)->delete();
+        $user = User::find($id);
+        $is_update = DB::table('users')->where('id', $id)
+                ->update(['name' => $request->name, 'email' => $request->email, 'phone' => $request->phone]);
+        foreach($request->roles as $role) 
+            $user->attachRole($role['name']); 
+        
+        return response()->json(['message' => 'User update succesfully'], 200); 
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error user update'], 1451);
+        }
+    }
+    public function addSuperUser(Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole('administrator')) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'phone' => 'required',
+            ]);
+            if($validator->fails()) {
+                return response()->json($validator->errors());
+            }
+            $name = ucfirst(strtolower($request->name));
+            $email = strtolower($request->email);
+            $phone = $request->phone;
+            $password = Hash::make("password");
+            $user = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => $password,
+                'phone' => $phone,
+            ]);
+            foreach($request->roles as $role) {
+                $user->attachRole($role['name']);   
+            }
+            Mail::to($email)->send(new UserMail($user));
+            return response()->json(['message' => 'User succsessfully create'], 201);
+        
+    }
+    public function getUsersByRole (Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator','administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+
+        $users = $this->us_rep->get();
+        if(is_null($users)) 
+            return $this->error("users");
+        $array = [];
+        $filter = $request->filter;
+        if($filter === 'false') {
+            foreach($users as $user) {
+                if($user->hasRole('user')) {
+                    $array[] = $user;
+                }
+            }
+            return response()->json($array);
+        }
+        if($filter === 'true') {
+            $users->load('roles');
+            foreach($users as $user) {
+                if($user->hasRole(['moderator','administrator'])) {
+                    $array[] = $user;
+                }
+            }
+            return response()->json($array);
+        }
     }
 
     public function store(Request $request) {
@@ -57,8 +145,19 @@ class UserController extends SiteController
 
     }
 
-    public function destroy() {
-    	
+    public function destroy($id) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole('administrator')) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+            $user = User::find($id)->delete();
+            return response()->json(['message' => 'User succsessfully delete'], 200);
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'User restrict delete'], 1451);
+        }
     }
     public function login()
     {
@@ -130,61 +229,5 @@ class UserController extends SiteController
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
-    
-    // public function login(Request $request){
-    
-    //     if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-    //         $user = Auth::user();
-    //         $success['token'] =  $user->createToken('MyApp')->accessToken;
-    //         return response()->json(['success' => $success], $this->successStatus);
-    //     }
-    //     else{
-    //         return response()->json(['error'=>'Unauthorised'], 401);
-    //     }
-    // }
 
-
-    // /**
-    //  * Register api
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required',
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //         'phone' => 'required',
-    //         'c_password' => 'required|same:password',
-    //     ]);
-
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['error'=>$validator->errors()], 401);            
-    //     }
-
-        
-    //     $input = $request->all();
-    //     $input['password'] = bcrypt($input['password']);
-    //     $user = User::create($input);
-    //     $success['token'] =  $user->createToken('MyApp')->accessToken;
-    //     $success['name'] =  $user->name;
-
-
-    //     return response()->json(['success'=>$success], $this->successStatus);
-    // }
-
-
-    // /**
-    //  * details api
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function details()
-    // {
-    //     $user = Auth::user();
-    //     return response()->json(['success' => $user], $this->successStatus);
-    // }
-    
 }

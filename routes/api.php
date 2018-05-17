@@ -27,9 +27,11 @@ Route::middleware('cors')->group(function(){
     Route::post('register', 'UserController@register');
     Route::post('logout', 'UserController@logout'); 
     Route::post('pdfgenerator', 'PdfGenerateController@pdfview');   
-    Route::group(['middleware' => 'auth:api'], function(){
-         Route::post('details', 'UserController@details');	
-     });
+    Route::post('getUsersByRole', 'UserController@getUsersByRole'); 
+    Route::post('addSuperUser', 'UserController@addSuperUser'); 
+    Route::post('getRoles', 'RoleController@getRoles'); 
+    Route::post('getUserById/{id}', 'UserController@getUserById');
+    Route::post('updateUser/{id}', 'UserController@updateUser'); 
    Route::apiResources(
         ['employees' => 'EmployeeController',
          'positions' => 'PositionController',
@@ -41,7 +43,7 @@ Route::middleware('cors')->group(function(){
          'rows_places' => 'RowPlaceController',
          'tickets' => 'TicketController',
          'category_places' => 'CategoryPlaceController',
-         'users' => 'UserController' 
+         'users' => 'UserController',
         ]
    );
     
