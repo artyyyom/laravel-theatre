@@ -76,15 +76,34 @@ class SeanceController extends SiteController
     }
 
     public function store() {
-
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
     }
 
     public function update() {
-
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
     }
 
-    public function destroy() {
-    	
+    public function destroy($id) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+            $performance = Seance::find($id)->delete();
+            return response()->json(['message' => 'Seance succsessfully delete'], 200);
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'Performance restrict delete'], 1451);
+        }
     }
     public function getUserActualSeances() {
         $user = auth()->user();

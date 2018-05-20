@@ -32,6 +32,10 @@ Route::middleware('cors')->group(function(){
     Route::post('getRoles', 'RoleController@getRoles'); 
     Route::post('getUserById/{id}', 'UserController@getUserById');
     Route::post('updateUser/{id}', 'UserController@updateUser'); 
+    Route::post('uploadEmployeePhotos', 'EmployeeController@uploadEmployeePhotos');
+    Route::post('uploadPerformancePhotos', 'PerformanceController@uploadPerformancePhotos');
+    Route::post('upload', 'UploadController@upload'); 
+
    Route::apiResources(
         ['employees' => 'EmployeeController',
          'positions' => 'PositionController',

@@ -10,7 +10,10 @@ class Employee extends Model
     	'created_at',
     	'updated_at'
     ];
-    
+    protected $fillable = [
+        'name', 'middlename', 'surname', 'address', 'birthday', 'biography',
+        'mobile_number', 'biography_short', 'photo_main', 'photos', 'unit_id'
+    ];
     public function performances() {
         return $this->belongsToMany('App\Performance', 'performances_employees', 'employee_id',  'performance_id')
             ->withPivot('role', 'role');

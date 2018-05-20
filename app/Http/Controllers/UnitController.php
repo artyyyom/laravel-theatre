@@ -25,6 +25,7 @@ class UnitController extends SiteController
             for($i = 0; $i < count($units); $i++) {
                 $array[$i]['id'] = $units[$i]['id'];
                 $array[$i]['name'] = $units[$i]['name'];
+                $array[$i]['order'] = $units[$i]['order'];
                 if(empty($units[$i]->employees[0]))
                     $array[$i]['is_parent'] = false;
                 else {

@@ -11,7 +11,9 @@ class Seance extends Model
     	'updated_at'
     ];
 
-    
+    protected $fillable = [
+        'date', 'time', 'performance_id', 'stage_id', 'season_id', 'datetime'
+    ];
     public function season() {
         return $this->belongsTo('App\Season');
     }
