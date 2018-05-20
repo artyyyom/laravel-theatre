@@ -14,7 +14,9 @@ class Ticket extends Model
     ];
     protected $primaryKey = "id";
 
-    protected $fillable = ['id','is_avalaible', 'status', 'user_id'];
+    protected $fillable = ['id','is_avalaible', 'status', 
+                           'user_id', 'row_id', 'place_id',
+                           'price', 'category_id', 'seance_id'];
     
 
     public function seance() {

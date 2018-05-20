@@ -79,10 +79,10 @@ class UnitController extends SiteController
         if($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $name = $request->name;
+    
         try {
         $unit = Unit::create([
-            'name' => $name,
+            'name' => $request->name,
             'order'=> $request->order 
         ]);
         return response()->json(['message' => 'Unit successfully create'], 200);    

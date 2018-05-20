@@ -19,6 +19,7 @@ class RowPlaceController extends SiteController
         $rows_places = $this->rp_rep->get('*', FALSE, [['stage_id', '=', $stage_id]]);
         if(is_null($rows_places)) 
                 return $this->error("rows_places");
+        $rows_places->load('category_place');
         return response()->json($rows_places);
     }
     public function show($id) {

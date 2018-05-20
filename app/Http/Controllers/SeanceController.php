@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\SeancesRepository;
-
+use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Seance;
 use App\Ticket;
@@ -57,6 +57,7 @@ class SeanceController extends SiteController
             $seances = $this->sn_rep->get('*', FALSE, FALSE, ['date', 'asc']);
             if(is_null($seances)) 
                 return $this->error("seances");
+            $seances->load('performance');
             return response()->json($seances);
         }
         /* Get actual seances */
@@ -74,21 +75,67 @@ class SeanceController extends SiteController
         }
 
     }
-
-    public function store() {
-        $user = auth()->user();
-        if(!$user)
-            return response()->json(['error' => 'Unauthorized'], 401);
-        if(!$user->hasRole(['moderator', 'administrator'])) 
-            return response()->json(['error' => 'Unauthorized'], 403);
+    public function show($id) {
+        $seance = $this->sn_rep->one($id);
+        if(is_null($seance)) 
+            return $this->error("seance");
+        $seance->load('performance', 'stage', 'season');
+        return response()->json($seance);
     }
 
-    public function update() {
+    public function store(Request $request) {
         $user = auth()->user();
         if(!$user)
             return response()->json(['error' => 'Unauthorized'], 401);
         if(!$user->hasRole(['moderator', 'administrator'])) 
             return response()->json(['error' => 'Unauthorized'], 403);
+
+        $validator = Validator::make($request->all(), [
+            'date' => 'required|date',
+            'time' => 'required',
+            'datetime' => 'required',
+            'performance_id' => 'required',
+            'stage_id' => 'required',
+            'season_id' => 'required'
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        try {
+        $seance = Seance::create([
+           'date' => $request->date,
+           'time' => $request->time, 
+           'datetime' => $request->datetime,
+           'performance_id' => $request->performance_id,
+           'stage_id' => $request->stage_id,
+           'season_id' => $request->season_id
+        ]);
+        
+        return response()->json($seance['id'], 200);    
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error seance create'], 1451);
+        }
+        
+    }
+
+    public function update($id, Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        try {
+            $seance = DB::table('seances')->where('id', $id)->update($request->all());
+            
+        if(!$seance)
+            return response()->json(['message' => 'Table not updated'], 404);
+
+        return response()->json(['message' => 'Seance update succesfully'], 200); 
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error seance update'], 1451);
+        }
     }
 
     public function destroy($id) {

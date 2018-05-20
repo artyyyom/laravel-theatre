@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\TicketsRepository;
+use Illuminate\Support\Facades\Validator;
 use App\Ticket;
 use DB;
 
@@ -36,8 +37,56 @@ class TicketController extends SiteController
 
         }
     }
-    public function store() { }
+    public function store(Request $request) { 
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
 
+        try {
+        foreach($request->tickets as $ticket) {
+            $price = $ticket['price'] * 1000;
+            $unit = Ticket::create([
+                'row_id' => $ticket['row_id'],
+                'place_id' => $ticket['place_id'],
+                'category_id' => $ticket['category_id'],
+                'seance_id' => $request->seance_id,
+                'price' => $price   
+            ]);
+        }
+        return response()->json(['message' => 'Ticket successfully create'], 200);    
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error ticket create'], 1451);
+        }
+    }
+    public function updateRootTickets($id, Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+
+        try {
+        foreach($request->tickets as $ticket) {
+            $price = $ticket['price'] * 1000;
+            DB::table('tickets')->where('id', $ticket['id'])->update(
+                [
+                'row_id' => $ticket['row_id'],
+                'place_id' => $ticket['place_id'],
+                'category_id' => $ticket['category_id'],
+                'seance_id' => $request->seance_id,
+                'price' => $price   
+                ]
+            );
+        }
+        return response()->json(['message' => 'Ticket successfully update'], 200);    
+        }
+        catch(Exception $e) {
+            return response()->json(['message' => 'error update create'], 1451);
+        }
+    }
     public function update($id, Request $request) {
         $ticket = DB::table('tickets')->where('id', $id)->update($request->all());
         if(!$ticket) {

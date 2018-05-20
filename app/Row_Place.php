@@ -16,7 +16,7 @@ class Row_Place extends Model
     }
     
     public function category_place() {
-        return $this->belongsTo('App\Category_Place');
+        return $this->belongsTo('App\Category_Place', 'category_id');
     }
     
     public function tickets() {
