@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\UserMail;
+use App\Mail\RecoverMail;
 use Illuminate\Support\Facades\Mail;
 use DB;
 
@@ -139,8 +140,8 @@ class UserController extends SiteController
         if($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $name = strtolower($request->name);
-        $email = strtolower($request->email);
+        $name = $request->name;
+        $email = mb_strtolower($request->email);
         $phone = $request->phone;
         $password = Hash::make("password");
         $user = User::create([
@@ -242,5 +243,26 @@ class UserController extends SiteController
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
+    public function recover(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'Your email address was not found'], 401);
+        }
+        try {
+            $password = "passwords";
+            $passwordEncrypt = Hash::make("passwords");
+            
+            User::where('email', $request->email)->update(["password" => $passwordEncrypt]);
+        } catch (\Exception $e) {
+            $error_message = $e->getMessage();
+            return response()->json(['success' => false, 'error' => $error_message], 401);
+        }
+        Mail::to($request->email)->send(new RecoverMail($user, $password));
+        return response()->json([
+            'success' => true, 'data'=> ['message'=> 'A reset email has been sent! Please check your email.']
+        ]);
+    }
+
 
 }
