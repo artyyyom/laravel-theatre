@@ -32,7 +32,7 @@ class TicketController extends SiteController
             $tickets = $this->t_rep->get('*', FALSE, [['seance_id', '=', $seance_id]]);
             if(is_null($tickets)) 
                 return $this->error("tickets");
-        
+            $tickets->load('category_place');
             return response()->json($tickets);
 
         }

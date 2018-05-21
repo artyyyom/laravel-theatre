@@ -86,6 +86,19 @@ class UserController extends SiteController
             return response()->json(['message' => 'User succsessfully create'], 201);
         
     }
+    public function getUserByTicketId($id) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator','administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+
+        $user = User::whereIn('id', function($query) use ($id) {
+            $query->select('user_id')->from('tickets')->whereRaw("tickets.id = $id");
+        })->first();
+
+        return response()->json($user);
+    }
     public function getUsersByRole (Request $request) {
         $user = auth()->user();
         if(!$user)
