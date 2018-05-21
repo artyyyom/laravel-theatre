@@ -71,7 +71,8 @@ class SeasonController extends SiteController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'start_date' => 'required|date',
-            'end_date' => 'required|date'
+            'end_date' => 'required|date',
+            'isActive' => 'required'
         ]);
         if($validator->fails()) {
             return response()->json($validator->errors());
@@ -81,7 +82,8 @@ class SeasonController extends SiteController
         $season = Season::create([
             'name' => $name, 
             'start_date' => $request->start_date,
-            'end_date' => $request->end_date
+            'end_date' => $request->end_date,
+            'isActive' => $request->isActive
         ]);
         return response()->json(['message' => 'Season successfully create'], 200);    
         }

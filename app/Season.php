@@ -13,7 +13,8 @@ class Season extends Model
 	protected $fillable = [
 		'name',
 		'start_date',
-		'end_date'
+		'end_date',
+		'isActive'
     ];
     public function seances() {
     	return $this->hasMany('App\Seance');
