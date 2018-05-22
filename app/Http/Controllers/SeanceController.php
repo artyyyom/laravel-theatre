@@ -201,4 +201,5 @@ class SeanceController extends SiteController
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+    
 }

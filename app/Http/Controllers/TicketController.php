@@ -135,4 +135,15 @@ class TicketController extends SiteController
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+    public function reportSalesSeance(Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        $buy = Ticket::where('seance_id', $request->id)->where('status', 2)->count();
+        $sum = Ticket::where('seance_id', $request->id)->where('status', 2)->sum('price');
+        $order = Ticket::where('seance_id', $request->id)->where('status', 1)->count();
+        return response()->json(["buy" => $buy, "order" => $order, "sum" => $sum]);
+    }
 }           

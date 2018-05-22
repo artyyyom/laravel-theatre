@@ -38,6 +38,7 @@ Route::middleware('cors')->group(function(){
     Route::post('updateRootTickets/{id}', 'TicketController@updateRootTickets');
     Route::post('getUserByTicketId/{id}', 'UserController@getUserByTicketId');
     Route::post('recover', 'UserController@recover');
+    Route::post('reportSalesSeance', 'TicketController@reportSalesSeance');
    Route::apiResources(
         ['employees' => 'EmployeeController',
          'positions' => 'PositionController',
