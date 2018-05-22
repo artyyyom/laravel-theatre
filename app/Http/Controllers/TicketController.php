@@ -7,6 +7,7 @@ use App\Repositories\TicketsRepository;
 use Illuminate\Support\Facades\Validator;
 use App\Ticket;
 use DB;
+use App\Seance;
 
 
 class TicketController extends SiteController
@@ -145,5 +146,42 @@ class TicketController extends SiteController
         $sum = Ticket::where('seance_id', $request->id)->where('status', 2)->sum('price');
         $order = Ticket::where('seance_id', $request->id)->where('status', 1)->count();
         return response()->json(["buy" => $buy, "order" => $order, "sum" => $sum]);
+    }
+    public function reportSalesSeanceMonth(Request $request) {
+        $user = auth()->user();
+        if(!$user)
+            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!$user->hasRole(['moderator', 'administrator'])) 
+            return response()->json(['error' => 'Unauthorized'], 403);
+        $year = date("Y");
+        $month = $request->code;
+        $seances = Seance::whereYear('date', 2018)->whereMonth('datetime', $month)->get();
+        $seances->load('performance', 'stage');
+        $result;
+        $sumPay = 0;
+        $sumBuy = 0;
+        $sumOrder = 0;
+        $arr = [];
+        foreach($seances as $key => $seance) {
+            $result[$key]['id'] = $seance->id;
+            $result[$key]['datetime'] = $seance->datetime;
+            $result[$key]['performance'] = $seance->performance;
+            $result[$key]['stage'] = $seance->stage;            
+            $buy = Ticket::where('seance_id', $seance->id)->where('status', 2)->count();    
+            $order = Ticket::where('seance_id', $seance->id)->where('status', 1)->count();
+            $sum = Ticket::where('seance_id', $seance->id)->where('status', 2)->sum('price');
+            $sumPay+=$sum;
+            $sumBuy+=$buy;
+            $sumOrder+=$order;
+            $result[$key]['buy'] = $buy;  
+            $result[$key]['sum'] = $sum;
+            $result[$key]['order'] = $order;        
+        }
+        $result['buy'] = $sumBuy;
+        $result['order'] = $sumOrder;
+        $result['sum'] = $sumPay;
+        $arr = $result;
+        return response()->json($arr);
+    
     }
 }           
