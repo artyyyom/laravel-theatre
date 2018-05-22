@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Seance;
 use App\Ticket;
+use App\User;
 class SeanceController extends SiteController
 {
     public function __construct(SeancesRepository $sn_rep) {
@@ -66,7 +67,7 @@ class SeanceController extends SiteController
             //$seances = $this->sn_rep->get('*', FALSE, [['date', '>=', date('Y-m-d'), ['time', '>', date('H:i:s')]]], ['date', 'asc']);
             $seances = Seance::whereIn('season_id', function($query) {
                 $query->select(DB::raw(1))->from('seasons')->whereRaw('seasons.id = seances.season_id && seasons.isActive = 1');
-            })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('date','asc')->with('performance', 'stage')
+            })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('date','asc')->orderBy('time', 'asc')->with('performance', 'stage')
             ->get();
             if(is_null($seances)) 
                 return $this->error("seances");
@@ -152,31 +153,51 @@ class SeanceController extends SiteController
             return response()->json(['message' => 'Performance restrict delete'], 1451);
         }
     }
-    public function getUserActualSeances() {
+    public function getActualSeances($id) {
+        $seances = Seance::whereIn('id', function($query) use ($id) {
+            $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $id");
+        })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('datetime','asc')
+          ->with(['tickets' => function($query) use ($id) {
+            $query->where("user_id", $id)->with('category_place');
+        }])->with('performance', 'stage')->get();
+        return $seances;
+    }
+    public function getUserActualSeances(Request $request) {
         $user = auth()->user();
         if($user && $user->hasRole(['user'])) {
-            $seances = Seance::whereIn('id', function($query) use ($user) {
-                $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $user->id");
-            })->where('datetime', '>=', date('Y-m-d H:i:s'))->orderBy('datetime','asc')
-              ->with(['tickets' => function($query) use ($user) {
-                $query->where("user_id", $user->id)->with('category_place');
-            }])->with('performance', 'stage')->get();
+            $seances = $this->getActualSeances($user->id);
             return response()->json($seances);
-        } else {
+        } 
+        if($user && $user->hasRole(['moderator', 'administrator'])) {
+            $user = User::find($request->id);
+            $seances = $this->getActualSeances($user->id);
+            return response()->json($seances);
+        }
+        else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
-    public function getUserHistorySeances() {
+    public function getHistorySeances($id) {
+        $seances = Seance::whereIn('id', function($query) use ($id) {
+            $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $id");
+        })->where('datetime', '<', date('Y-m-d H:i:s'))->orderBy('datetime','desc')
+          ->with(['tickets.category_place' => function($query) use ($id) {
+            $query->where("tickets.user_id", $id)->with('category_place');
+        }])->with('performance', 'stage')->get();
+        return $seances;
+    }
+    public function getUserHistorySeances(Request $request) {
         $user = auth()->user();
         if($user && $user->hasRole(['user'])) {
-            $seances = Seance::whereIn('id', function($query) use ($user) {
-                $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $user->id");
-            })->where('datetime', '<', date('Y-m-d H:i:s'))->orderBy('datetime','desc')
-              ->with(['tickets.category_place' => function($query) use ($user) {
-                $query->where("tickets.user_id", $user->id)->with('category_place');
-            }])->with('performance', 'stage')->get();
+            $seances = $this->getHistorySeances($user->id);
             return response()->json($seances); 
-        } else {
+        } 
+        if($user && $user->hasRole(['moderator', 'administrator'])) {
+            $user = User::find($request->id);
+            $seances = $this->getHistorySeances($user->id);
+            return response()->json($seances);
+        }
+        else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
