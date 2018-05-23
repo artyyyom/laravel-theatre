@@ -145,6 +145,7 @@ class TicketController extends SiteController
         $buy = Ticket::where('seance_id', $request->id)->where('status', 2)->count();
         $sum = Ticket::where('seance_id', $request->id)->where('status', 2)->sum('price');
         $order = Ticket::where('seance_id', $request->id)->where('status', 1)->count();
+        $sum = $sum/1000;
         return response()->json(["buy" => $buy, "order" => $order, "sum" => $sum]);
     }
     public function reportSalesSeanceMonth(Request $request) {
@@ -155,7 +156,7 @@ class TicketController extends SiteController
             return response()->json(['error' => 'Unauthorized'], 403);
         $year = date("Y");
         $month = $request->code;
-        $seances = Seance::whereYear('date', 2018)->whereMonth('datetime', $month)->get();
+        $seances = Seance::whereYear('date', $year)->whereMonth('datetime', $month)->get();
         $seances->load('performance', 'stage');
         $result;
         $sumPay = 0;
@@ -179,9 +180,45 @@ class TicketController extends SiteController
         }
         $result['buy'] = $sumBuy;
         $result['order'] = $sumOrder;
-        $result['sum'] = $sumPay;
+        $result['sum'] = $sumPay/1000;
         $arr = $result;
         return response()->json($arr);
     
+    }
+    public function reportSalesSeanceYear(Request $request) {
+        $sumPay = 0;
+        $sumBuy = 0;
+        $sumOrder = 0;
+        $sumPayYear = 0;
+        $sumBuyYear = 0;
+        $sumOrderYear = 0;
+        $months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        $year = $request->date;
+        $result = [];
+        foreach($months as $key => $month) {
+            $seances =  Seance::whereYear('date', $year)->whereMonth('datetime', $month)->get();
+            foreach($seances as $k => $seance) {
+                $buy = Ticket::where('seance_id', $seance->id)->where('status', 2)->count();    
+                $order = Ticket::where('seance_id', $seance->id)->where('status', 1)->count();
+                $sum = Ticket::where('seance_id', $seance->id)->where('status', 2)->sum('price');        
+                $sumPay+=$sum;
+                $sumBuy+=$buy;
+                $sumOrder+=$order;
+                $sumPayYear+=$sum;
+                $sumBuyYear+=$buy;
+                $sumOrderYear+=$order;
+            }
+            $result[$key]['buy'] = $sumBuy;
+            $result[$key]['order'] = $sumOrder;
+            $result[$key]['sum'] = $sumPay/1000;
+            $sumPay = 0;
+            $sumBuy = 0;
+            $sumOrder = 0;
+        }
+        
+        $result['buy'] = $sumBuyYear;
+        $result['order'] = $sumOrderYear;
+        $result['sum'] = $sumPayYear/1000;
+        return response()->json($result); 
     }
 }           

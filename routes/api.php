@@ -40,6 +40,7 @@ Route::middleware('cors')->group(function(){
     Route::post('recover', 'UserController@recover');
     Route::post('reportSalesSeance', 'TicketController@reportSalesSeance');
     Route::post('reportSalesSeanceMonth', 'TicketController@reportSalesSeanceMonth');
+    Route::post('reportSalesSeanceYear', 'TicketController@reportSalesSeanceYear');
    Route::apiResources(
         ['employees' => 'EmployeeController',
          'positions' => 'PositionController',
