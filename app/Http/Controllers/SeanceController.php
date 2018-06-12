@@ -180,9 +180,9 @@ class SeanceController extends SiteController
     public function getHistorySeances($id) {
         $seances = Seance::whereIn('id', function($query) use ($id) {
             $query->select('seance_id')->from('tickets')->whereRaw("seances.id = tickets.seance_id && tickets.user_id = $id");
-        })->where('datetime', '<', date('Y-m-d H:i:s'))->orderBy('datetime','desc')
-          ->with(['tickets.category_place' => function($query) use ($id) {
-            $query->where("tickets.user_id", $id)->with('category_place');
+        })->where('datetime', '<', date('Y-m-d H:i:s'))->orderBy('datetime','asc')
+          ->with(['tickets' => function($query) use ($id) {
+            $query->where("user_id", $id)->with('category_place');
         }])->with('performance', 'stage')->get();
         return $seances;
     }
